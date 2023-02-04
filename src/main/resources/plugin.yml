@@ -1,0 +1,29 @@
+name: BetterRisingBlocks
+version: '${project.version}'
+main: me.damlet.betterrisingblocks.BetterRisingBlocks
+api-version: 1.19
+depend: [  FastAsyncWorldEdit  ]
+
+commands:
+  start:
+    description: Starts the game
+    permission: brb.admin
+    permission-message: Invalid Permissions!
+    usage: |
+      Invalid Usage!
+      /<command>
+  risingblocks:
+    description: Config stuff
+    permission: brb.admin
+    permission-message: Invalid Permissions!
+    aliases:
+      - rb
+      - rising
+    usage: |
+      Invalid Usage!
+      /<command> (time|block)
+
+permissions:
+  brb.admin:
+    description: Allows you to start the game
+    default: op
