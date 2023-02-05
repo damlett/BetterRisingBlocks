@@ -1,5 +1,7 @@
 package me.damlet.betterrisingblocks.listeners
 
+import me.damlet.betterrisingblocks.betterrisingblocks.GameManager
+import me.damlet.betterrisingblocks.states.game.RisingBlocksState
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor

@@ -1,0 +1,11 @@
+# Which states will keep inventory be enabled
+keep-inventory:
+  grace-period: true
+  pvp: true
+  rising: false
+
+# The time it takes for each state to end.
+times:
+  grace-period: 15
+  pvp: 10
+  border: 40 # This is the time it will take for the world border to shrink once the blocks start rising.

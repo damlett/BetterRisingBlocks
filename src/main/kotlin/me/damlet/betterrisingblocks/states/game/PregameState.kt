@@ -1,8 +1,8 @@
 package me.damlet.betterrisingblocks.states.game
 
 import me.damlet.betterrisingblocks.BetterRisingBlocks.Companion.plugin
-import me.damlet.betterrisingblocks.betterrisingblocks.BRPlayer
 import me.damlet.betterrisingblocks.betterrisingblocks.GameManager
+import me.damlet.betterrisingblocks.betterrisingblocks.PlayerManager
 import me.damlet.betterrisingblocks.commands.StartCommand
 import me.damlet.betterrisingblocks.states.states.GameState
 import net.kyori.adventure.text.Component
@@ -30,12 +30,10 @@ open class PregameState : GameState() {
         val world = Bukkit.getWorlds()[0]
 
         players.forEach { player ->
-            val brPlayer = BRPlayer(player)
-            GameManager.players.add(brPlayer)
             player.teleport(world.spawnLocation)
             player.gameMode = GameMode.ADVENTURE
 
-            brPlayer.reset(false)
+            PlayerManager.reset(player, false)
         }
 
         world.worldBorder.center = world.spawnLocation
@@ -71,14 +69,9 @@ open class PregameState : GameState() {
                 )
         )
 
-        if (GameManager.getBRPlayer(player) == null) {
-            val brPlayer = BRPlayer(player)
-            GameManager.players.add(brPlayer)
-            player.teleport(world.spawnLocation)
-            player.gameMode = GameMode.ADVENTURE
-
-            brPlayer.reset(false)
-        }
+        player.teleport(world.spawnLocation)
+        player.gameMode = GameMode.ADVENTURE
+        PlayerManager.reset(player, false)
     }
 
     override fun isReadyToEnd(): Boolean {

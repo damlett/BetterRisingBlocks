@@ -6,8 +6,8 @@ import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.CuboidRegion
 import com.sk89q.worldedit.regions.Region
 import com.sk89q.worldedit.world.block.BlockState
+import me.damlet.betterrisingblocks.betterrisingblocks.ConfigManager
 import me.damlet.betterrisingblocks.betterrisingblocks.GameManager
-import me.damlet.betterrisingblocks.states.player.PlayerDeadState
 import me.damlet.betterrisingblocks.states.states.GameState
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -16,11 +16,10 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.PlayerDeathEvent
-import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scheduler.BukkitRunnable
 import java.time.Duration
 
-class RisingBlocksState(val solo: Boolean) : GameState() {
+class RisingBlocksState(private val border: Duration, private val solo: Boolean) : GameState() {
     override val duration: Duration
         get() = Duration.ZERO
 
@@ -69,11 +68,11 @@ class RisingBlocksState(val solo: Boolean) : GameState() {
             Component.text("Lava Rising\n").color(NamedTextColor.AQUA).decorate(TextDecoration.BOLD)
                 .append(Component.text("Hardcore mode is now ").color(NamedTextColor.DARK_AQUA)
                 .append(Component.text("on").color(NamedTextColor.RED).decorate(TextDecoration.BOLD))
-                .append(Component.text(". Lava will begin to rise!").color(NamedTextColor.DARK_AQUA))
+                .append(Component.text(". Blocks will begin to rise! The world border will shrink to 50 blocks in ${ConfigManager.borderTime} minutes. Keep inventory is ${if (ConfigManager.keepInventory("rising")) "on" else "off"}.").color(NamedTextColor.DARK_AQUA))
                     .decoration(TextDecoration.BOLD, TextDecoration.State.FALSE))
         )
 
-        Bukkit.getWorlds()[0].worldBorder.setSize(50.0, 2500)
+        Bukkit.getWorlds()[0].worldBorder.setSize(50.0, border.seconds)
 
         scheduleRepeating(risingTask, 5, 5)
     }
@@ -85,15 +84,16 @@ class RisingBlocksState(val solo: Boolean) : GameState() {
     override fun isReadyToEnd(): Boolean {
         var alivePlayers = 0
         for (player in GameManager.players) {
-            if (!player.eliminated || !player.player.isOnline) alivePlayers++
+            if (player.gameMode != GameMode.SPECTATOR) alivePlayers++
         }
         return alivePlayers <= 1 && !solo
     }
 
     @EventHandler
     fun onDeath(e: PlayerDeathEvent) {
-        val brPlayer = GameManager.getBRPlayer(e.player) ?: return
-        brPlayer.status.changeState(PlayerDeadState(brPlayer))
+        e.player.gameMode = GameMode.SPECTATOR
+
+        e.keepInventory = ConfigManager.keepInventory("rising")
     }
 
 }

@@ -21,7 +21,7 @@ commands:
       - rising
     usage: |
       Invalid Usage!
-      /<command> (time|block)
+      /<command> (time|block|skip)
 
 permissions:
   brb.admin:

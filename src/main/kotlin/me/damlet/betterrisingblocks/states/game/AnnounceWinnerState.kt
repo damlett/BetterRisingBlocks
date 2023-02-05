@@ -4,6 +4,7 @@ import me.damlet.betterrisingblocks.betterrisingblocks.GameManager
 import me.damlet.betterrisingblocks.states.states.GameState
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.GameMode
 import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.entity.EntityDamageEvent
@@ -19,12 +20,12 @@ class AnnounceWinnerState : GameState() {
     }
 
     override fun onStart() {
-        GameManager.players.forEach { brPlayer ->
-            brPlayer.player.playSound(brPlayer.player.location, Sound.ITEM_GOAT_HORN_SOUND_0, 1f, 1f)
+        GameManager.players.forEach { player ->
+            player.playSound(player.location, Sound.ITEM_GOAT_HORN_SOUND_0, 1f, 1f)
 
-            if (brPlayer.eliminated) return@forEach
+            if (player.gameMode == GameMode.SPECTATOR) return@forEach
 
-            broadcast(brPlayer.player.displayName().append(
+            broadcast(player.displayName().append(
                 Component.text(" has won!").color(NamedTextColor.AQUA)
             ))
         }

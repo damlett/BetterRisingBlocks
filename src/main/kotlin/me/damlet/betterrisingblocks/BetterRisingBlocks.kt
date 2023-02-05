@@ -8,6 +8,8 @@ class BetterRisingBlocks : JavaPlugin() {
 
     override fun onEnable() {
         // Plugin startup logic
+        saveDefaultConfig()
+
         plugin = this
 
         server.pluginManager.registerEvents(DeathListener(), this)
