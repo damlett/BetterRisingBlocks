@@ -11,6 +11,6 @@ object PlayerManager {
         player.fallDistance = 0f
         player.fireTicks = 0
         player.freezeTicks = 0
-        if (clear) player.inventory.contents = null
+        if (clear) player.inventory.clear()
     }
 }
